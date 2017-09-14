@@ -1,8 +1,10 @@
-const queries = require('../db/queries');
 const express = require('express');
-const valid = require('./validate');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+
+const queries = require('../db/queries');
+const valid = require('./validate');
+const authMiddleware = require('../auth/middleware');
 
 const router = express.Router();
 
@@ -31,7 +33,17 @@ router.post('/auth/login', (req,res,next) => {
 	} else {
 		next(new Error('Invalid Email/Password'));
 	}
+});
 
+router.get('/users/:id/articles', authMiddleware.allowAccess, (req, res, next) => {
+//router.get('/users/:id/articles', (req, res) => {
+	if (!isNaN(req.params.id)) {
+		queries.getArticlesByUserId(req.params.id).then(articles => {
+		res.json(articles);
+	});
+	} else {
+		res.Error(res, 500, 'Invalid ID');
+	}
 });
 
 module.exports = router;
