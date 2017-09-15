@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 function allowAccess(req, res, next){
   const authHeader = req.get('Authorization');
   // console.log(req.signedCookies);
-  console.log(authHeader);
+  //console.log(authHeader);
   const token = authHeader.split(' ')[1];
   if(token){
     // verify token

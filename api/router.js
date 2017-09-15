@@ -36,10 +36,20 @@ router.post('/auth/login', (req,res,next) => {
 });
 
 router.get('/users/:id/articles', authMiddleware.allowAccess, (req, res, next) => {
-//router.get('/users/:id/articles', (req, res) => {
 	if (!isNaN(req.params.id)) {
 		queries.getArticlesByUserId(req.params.id).then(articles => {
 		res.json(articles);
+	});
+	} else {
+		res.Error(res, 500, 'Invalid ID');
+	}
+});
+
+router.get('/users/:id/playlists', authMiddleware.allowAccess, (req, res, next) => {
+	if (!isNaN(req.params.id)) {
+		queries.getPlaylistsByUserId(req.params.id).then(playlists => {
+      //console.log(playlists);
+      res.json(playlists);
 	});
 	} else {
 		res.Error(res, 500, 'Invalid ID');
