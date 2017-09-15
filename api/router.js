@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { extract } = require('article-parser');
 
 const queries = require('../db/queries');
 const valid = require('./validate');
@@ -41,7 +42,7 @@ router.get('/users/:id/articles', authMiddleware.allowAccess, (req, res, next) =
 		res.json(articles);
 	});
 	} else {
-		res.Error(res, 500, 'Invalid ID');
+		next(new Error('Invalid ID'));
 	}
 });
 
@@ -52,8 +53,28 @@ router.get('/users/:id/playlists', authMiddleware.allowAccess, (req, res, next) 
       res.json(playlists);
 	});
 	} else {
-		res.Error(res, 500, 'Invalid ID');
+		next(new Error('Invalid ID'));
 	}
+});
+
+router.post('/article', (req, res, next) => {
+
+  let url = req.body.url;
+
+  extract(url).then((parsedArticle) => {
+    let article = {
+      users_id: req.body.users_id,
+      title: parsedArticle.title,
+      content: parsedArticle.content,
+      url: url
+    };
+    queries.createArticle(article).then(response => {
+      res.json(response);
+    });
+  }).catch((err) => {
+      next(new Error(err));
+  });
+
 });
 
 module.exports = router;

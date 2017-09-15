@@ -24,7 +24,12 @@ module.exports = {
       .then(articles => {
           return groupBy(articles, 'playlist_name');
       });
+  },
+
+  createArticle(article){
+    return knex('article').insert(article, '*');
   }
+
 };
 
 function groupBy(items, prop) {
