@@ -57,7 +57,7 @@ router.get('/users/:id/playlists', authMiddleware.allowAccess, (req, res, next) 
 	}
 });
 
-router.post('/article', (req, res, next) => {
+router.post('/article', authMiddleware.allowPost, (req, res, next) => {
 
   let url = req.body.url;
 

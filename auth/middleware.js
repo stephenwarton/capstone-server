@@ -20,6 +20,28 @@ function allowAccess(req, res, next){
   }
 }
 
+function allowPost(req, res, next){
+  const authHeader = req.get('Authorization');
+  const authId = req.get('Id');
+  // console.log(req.signedCookies);
+  //console.log(authHeader);
+  const token = authHeader.split(' ')[1];
+  if(token){
+    // verify token
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
+      if(!err && authId == decoded.id){
+        return next();
+       }
+      res.status(401)
+      next(new Error('Un-Authorized'));
+    });
+  }else{
+    res.status(401)
+    next(new Error('Un-Authorized'))
+  }
+}
+
 module.exports = {
-  allowAccess
+  allowAccess,
+  allowPost
 };
