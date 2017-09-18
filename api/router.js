@@ -56,7 +56,7 @@ router.get('/users/:id/playlists', authMiddleware.allowAccess, (req, res, next) 
 	}
 });
 
-router.post('/article', authMiddleware.allowPost, (req, res, next) => {
+router.post('/article', authMiddleware.allow, (req, res, next) => {
   let url = req.body.url;
 
   extract(url).then((parsedArticle) => {
@@ -74,13 +74,21 @@ router.post('/article', authMiddleware.allowPost, (req, res, next) => {
   });
 });
 
-router.post('/playlist', authMiddleware.allowPost, (req, res, next) => {
+router.post('/playlist', authMiddleware.allow, (req, res, next) => {
   let playlist = {
     users_id: req.body.users_id,
     name: req.body.name
   };
 
   queries.createPlaylist(playlist).then(response => {
+    res.json(response);
+  }).catch((err) => {
+      next(new Error(err));
+  });
+});
+
+router.delete('/article/:id', authMiddleware.allow, (req, res, next) => {
+  queries.deleteArticle(req.params.id).then(response => {
     res.json(response);
   }).catch((err) => {
       next(new Error(err));

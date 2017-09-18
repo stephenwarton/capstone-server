@@ -20,7 +20,7 @@ function allowAccess(req, res, next){
   }
 }
 
-function allowPost(req, res, next){
+function allow(req, res, next){
   const authHeader = req.get('Authorization');
   const authId = req.get('Id');
   // console.log(req.signedCookies);
@@ -43,5 +43,5 @@ function allowPost(req, res, next){
 
 module.exports = {
   allowAccess,
-  allowPost
+  allow
 };

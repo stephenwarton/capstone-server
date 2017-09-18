@@ -49,7 +49,11 @@ module.exports = {
 
   createPlaylist(playlist){
     return knex('playlist').insert(playlist, '*');
-  }
+  },
+
+  deleteArticle(id) {
+    return knex('article').where('id', id).del();
+  },
 
 };
 
