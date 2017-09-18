@@ -49,16 +49,14 @@ router.get('/users/:id/articles', authMiddleware.allowAccess, (req, res, next) =
 router.get('/users/:id/playlists', authMiddleware.allowAccess, (req, res, next) => {
 	if (!isNaN(req.params.id)) {
 		queries.getPlaylistsByUserId(req.params.id).then(playlists => {
-      //console.log(playlists);
       res.json(playlists);
-	});
+    });
 	} else {
 		next(new Error('Invalid ID'));
 	}
 });
 
 router.post('/article', authMiddleware.allowPost, (req, res, next) => {
-
   let url = req.body.url;
 
   extract(url).then((parsedArticle) => {
@@ -74,7 +72,19 @@ router.post('/article', authMiddleware.allowPost, (req, res, next) => {
   }).catch((err) => {
       next(new Error(err));
   });
+});
 
+router.post('/playlist', authMiddleware.allowPost, (req, res, next) => {
+  let playlist = {
+    users_id: req.body.users_id,
+    name: req.body.name
+  };
+
+  queries.createPlaylist(playlist).then(response => {
+    res.json(response);
+  }).catch((err) => {
+      next(new Error(err));
+  });
 });
 
 module.exports = router;

@@ -22,12 +22,33 @@ module.exports = {
               'article.content as article_content',
               'article.url as article_url')
       .then(articles => {
-          return groupBy(articles, 'playlist_name');
+          let grouped = groupBy(articles, 'playlist_name');
+          return knex('playlist').where('playlist.users_id', id).then(result => {
+            for(let item of result){
+              let name = item.name;
+              let isInArray = false;
+              for(let grouping of grouped){
+                if(Object.keys(grouping)[0] === item.name){
+                  isInArray = true;
+                }
+              }
+              if(!isInArray){
+                let newPlaylist = {};
+                newPlaylist[name] = [];
+                grouped.push(newPlaylist);
+              }
+            }
+            return grouped;
+          });
       });
   },
 
   createArticle(article){
     return knex('article').insert(article, '*');
+  },
+
+  createPlaylist(playlist){
+    return knex('playlist').insert(playlist, '*');
   }
 
 };
