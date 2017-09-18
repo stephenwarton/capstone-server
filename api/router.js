@@ -95,4 +95,12 @@ router.delete('/article/:id', authMiddleware.allow, (req, res, next) => {
   });
 });
 
+router.delete('/playlist/:id', authMiddleware.allow, (req, res, next) => {
+  queries.deletePlaylist(req.params.id).then(response => {
+    res.json(response);
+  }).catch((err) => {
+      next(new Error(err));
+  });
+});
+
 module.exports = router;

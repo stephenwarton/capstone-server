@@ -25,16 +25,17 @@ module.exports = {
           let grouped = groupBy(articles, 'playlist_name');
           return knex('playlist').where('playlist.users_id', id).then(result => {
             for(let item of result){
+              let id = {playlist_id: item.id};
               let name = item.name;
-              let isInArray = false;
+              let isObjectInArray = false;
               for(let grouping of grouped){
                 if(Object.keys(grouping)[0] === item.name){
-                  isInArray = true;
+                  isObjectInArray = true;
                 }
               }
-              if(!isInArray){
+              if(!isObjectInArray){
                 let newPlaylist = {};
-                newPlaylist[name] = [];
+                newPlaylist[name] = [id];
                 grouped.push(newPlaylist);
               }
             }
@@ -54,6 +55,10 @@ module.exports = {
   deleteArticle(id) {
     return knex('article').where('id', id).del();
   },
+
+  deletePlaylist(id) {
+    return knex('playlist').where('id', id).del();
+  }
 
 };
 
