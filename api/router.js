@@ -103,4 +103,25 @@ router.delete('/playlist/:id', authMiddleware.allow, (req, res, next) => {
   });
 });
 
+router.post('/article_playlist', authMiddleware.allow, (req, res, next) => {
+  let article_playlist = {
+    article_id: req.body.article_id,
+    playlist_id: req.body.playlist_id,
+  };
+
+  queries.addArticleToPlaylist(article_playlist).then(response => {
+    res.json(response);
+  }).catch((err) => {
+      next(new Error(err));
+  });
+});
+
+router.delete('/article_playlist/:id', authMiddleware.allow, (req, res, next) => {
+  queries.deleteArticle_Playlist(req.params.id).then(response => {
+    res.json(response);
+  }).catch((err) => {
+      next(new Error(err));
+  });
+});
+
 module.exports = router;

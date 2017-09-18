@@ -58,7 +58,15 @@ module.exports = {
 
   deletePlaylist(id) {
     return knex('playlist').where('id', id).del();
-  }
+  },
+
+  addArticleToPlaylist(article_playlist){
+    return knex('article_playlist').insert(article_playlist, '*');
+  },
+
+  deleteArticle_Playlist(id) {
+    return knex('article_playlist').where('id', id).del();
+  },
 
 };
 
