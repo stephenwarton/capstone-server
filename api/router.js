@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { extract } = require('article-parser');
+const striptags = require('striptags');
 
 const queries = require('../db/queries');
 const valid = require('./validate');
@@ -66,6 +67,9 @@ router.post('/article', authMiddleware.allow, (req, res, next) => {
       content: parsedArticle.content,
       url: url
     };
+
+    let strippedContent = striptags(article.content);
+    article.content = strippedContent;
     queries.createArticle(article).then(response => {
       res.json(response);
     });
