@@ -68,7 +68,7 @@ router.post('/article', authMiddleware.allow, (req, res, next) => {
       url: url
     };
 
-    let strippedContent = striptags(article.content);
+    let strippedContent = striptags(article.content,[],' ');
     article.content = strippedContent;
     queries.createArticle(article).then(response => {
       res.json(response);
