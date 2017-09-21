@@ -11,12 +11,12 @@ function allowAccess(req, res, next){
       if(!err && req.params.id == decoded.id){
         return next();
        }
-      res.status(401)
+      res.status(401);
       next(new Error('Un-Authorized'));
     });
   }else{
-    res.status(401)
-    next(new Error('Un-Authorized'))
+    res.status(401);
+    next(new Error('Un-Authorized'));
   }
 }
 
@@ -32,12 +32,12 @@ function allow(req, res, next){
       if(!err && authId == decoded.id){
         return next();
        }
-      res.status(401)
+      res.status(401);
       next(new Error('Un-Authorized'));
     });
   }else{
-    res.status(401)
-    next(new Error('Un-Authorized'))
+    res.status(401);
+    next(new Error('Un-Authorized'));
   }
 }
 
