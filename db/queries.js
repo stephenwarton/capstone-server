@@ -68,6 +68,10 @@ module.exports = {
     return knex('article_playlist').where('id', id).del();
   },
 
+  createUser(user) {
+    return knex('users').insert(user, '*');
+  }
+
 };
 
 function groupBy(items, prop) {

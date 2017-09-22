@@ -128,4 +128,30 @@ router.delete('/article_playlist/:id', authMiddleware.allow, (req, res, next) =>
   });
 });
 
+router.post('/users', (req,res,next) => {
+	if(valid.user(req.body)) {
+		queries.getUserByEmail(req.body.email).then(user => {
+			if(!user) {
+				bcrypt.hash(req.body.password, 10)
+					.then((hash) => {
+						let user = {
+							email: req.body.email,
+							password: hash
+						};
+						queries.createUser(user).then(user => {
+							res.json({
+								message: 'Success',
+								user
+							});
+						});
+				});
+			} else {
+				next(new Error('Email in use'));
+			}
+		});
+	} else {
+		next(new Error('Invalid Password'));
+	}
+});
+
 module.exports = router;
